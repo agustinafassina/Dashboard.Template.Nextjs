@@ -7,7 +7,7 @@ import '@/styles/globals.css'
 import { AxiosInterceptor } from '@/api/axiosBase'
 
 export const metadata = {
-  title: 'Security App'
+  title: 'Template Agus App'
 }
 
 const montserrat = Montserrat({ subsets: ['latin'] })
