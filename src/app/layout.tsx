@@ -5,9 +5,11 @@ import NavBar from '@/components/organism/NavBar'
 import Providers from '@/provider'
 import '@/styles/globals.css'
 import { AxiosInterceptor } from '@/api/axiosBase'
+import { cn } from '@/styles/cn'
+import { rootLayoutStyles } from './styles'
 
 export const metadata = {
-  title: 'Template Agus App'
+  title: 'Template Agus App',
 }
 
 const montserrat = Montserrat({ subsets: ['latin'] })
@@ -20,15 +22,12 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`bg-white dark:bg-gray_900 text-gray_800 dark:text-gray_100 m-0 p-0 ${montserrat.className}`}
+      className={cn(rootLayoutStyles.html, montserrat.className)}
       suppressHydrationWarning
     >
       <AxiosInterceptor>
         <UserProvider>
-          <body
-            className="bg-white dark:bg-gray_900 text-gray_800 dark:text-gray_100 m-0 p-0 transition-colors"
-            suppressHydrationWarning
-          >
+          <body className={rootLayoutStyles.body} suppressHydrationWarning>
             <Providers>
               <NavBar />
               {children}

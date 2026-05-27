@@ -1,16 +1,18 @@
 import React from 'react'
+import { SidebarProvider } from '@/context/SidebarContext'
 import SideBar from '@/components/organism/Sidebar'
+import { homeLayoutStyles } from './styles'
 
 const DirectoryLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-col h-[calc(100vh-4.75rem)]">
-      <div className="flex flex-grow w-full">
-        <SideBar />
-        <main className="flex-grow bg-green_50 dark:bg-gray_800 w-[83%] overflow-x-auto transition-colors">
-          {children}
-        </main>
+    <SidebarProvider>
+      <div className={homeLayoutStyles.wrapper}>
+        <div className={homeLayoutStyles.row}>
+          <SideBar />
+          <main className={homeLayoutStyles.main}>{children}</main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   )
 }
 
