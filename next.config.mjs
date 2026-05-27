@@ -17,12 +17,8 @@ const nextConfig = () => {
           protocol: 'https',
           hostname: 'cdn.auth0.com',
         },
-        {
-          protocol: 'https',
-          hostname: 'picsum.photos',
-        },
       ],
-      domains: ['s.gravatar.com', 'cdn.auth0.com', 'flagcdn.com', 'picsum.photos'],
+      domains: ['s.gravatar.com', 'cdn.auth0.com', 'flagcdn.com'],
     },
     output: 'standalone',
   }

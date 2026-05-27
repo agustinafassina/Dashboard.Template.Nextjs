@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getSession } from '@auth0/nextjs-auth0/edge'
+import { shouldRefreshToken } from '@/utils/jwt'
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname
@@ -10,6 +11,13 @@ export default async function middleware(req: NextRequest) {
     path.startsWith('/_next') ||
     path.includes('icon.png')
   ) {
+    return NextResponse.next()
+  }
+
+  const existingToken = req.cookies.get('token')?.value
+
+  // Skip Auth0 session round-trip when the access token is still valid.
+  if (!shouldRefreshToken(existingToken)) {
     return NextResponse.next()
   }
 

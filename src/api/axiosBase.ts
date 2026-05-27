@@ -19,10 +19,6 @@ const axiosBaseJson = axios.create({
 axiosBase.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = getCookie('token')
-    
-    if (process.env.NODE_ENV === 'development') {
-      console.log(token);
-    }
 
     if (!token) {
       throw new Error('No token available')

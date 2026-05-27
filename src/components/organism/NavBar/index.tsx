@@ -8,12 +8,12 @@ import { jwtDecode } from 'jwt-decode'
 import Image from 'next/image'
 import Link from 'next/link'
 import Button from '@/components/atoms/Button'
+import AppLogoIcon from '@/components/atoms/Icons/AppLogoIcon'
 import LogoutIcon from '@/components/atoms/Icons/Logout'
 import ThemeToggle from '@/components/atoms/ThemeToggle'
 import { NavBarUserSkeleton } from '@/components/atoms/Skeleton'
 import { getClientName } from '@/utils/sharedFunctions'
 import { CustomJwtPayload } from '@/interfaces/payload-jwt'
-import "core-js/stable/atob"
 
 export default function NavBar() {
   const { user, isLoading } = useUser()
@@ -48,7 +48,7 @@ export default function NavBar() {
     return (
       <nav className="flex items-center justify-between bg-green_500 dark:bg-green_600 border-b-[0.0625rem] border-b-gray_160 dark:border-b-gray_700 text-white p-3 w-full h-[4.75rem]">
         <div className="flex items-center">
-          <div className="w-[70px] h-[70px] bg-white/20 rounded animate-pulse mr-4" />
+          <div className="w-14 h-14 bg-white/20 rounded-lg animate-pulse mr-4" />
         </div>
         <NavBarUserSkeleton />
       </nav>
@@ -62,19 +62,14 @@ export default function NavBar() {
       aria-label="Main navigation"
     >
       <div className="flex items-center">
-        <Link 
-          href="/home/dashboard" 
-          className="flex items-center hover:opacity-80 transition-opacity"
+        <Link
+          href="/home/dashboard"
+          className="flex items-center mr-4 hover:opacity-90 transition-opacity"
           aria-label="Go to dashboard"
         >
-          <Image
-            src="https://picsum.photos/70/70?random=1"
-            alt="Dashboard Logo"
-            width={70}
-            height={70}
-            className="mr-4 rounded-lg"
-            priority
-          />
+          <span className="flex items-center justify-center w-14 h-14 rounded-lg bg-white/15 text-white ring-1 ring-white/20">
+            <AppLogoIcon />
+          </span>
         </Link>
       </div>
       

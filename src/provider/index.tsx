@@ -5,7 +5,17 @@ import { NextUIProvider } from '@nextui-org/react'
 import { ThemeProvider } from 'next-themes'
 
 export default function Providers({ children }: { children: ReactNode }) {
-  const [client] = useState(() => new QueryClient())
+  const [client] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000,
+            refetchOnWindowFocus: false,
+          },
+        },
+      }),
+  )
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

@@ -1,9 +1,4 @@
-export default async function Dashboard({
-  searchParams,
-}: {
-  searchParams: Promise<{ page?: string }>
-}) {
-
+export default function Dashboard() {
   return (
     <div className="h-[calc(90vh-10rem)] p-4 min-w-[70rem] max-w-[90rem] mx-auto">
       <div>
