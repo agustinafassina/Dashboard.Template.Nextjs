@@ -1,62 +1,49 @@
 'use client'
 
-import { useEffect, type ReactElement } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from '@/i18n/useTranslation'
+import DashboardSection from '@/components/organism/DashboardSection'
+import type { SectionKey } from '@/i18n/types'
 import { homeSectionStyles } from './styles'
 
-const VALID_SECTIONS = new Set(['dashboard', 'costs', 'iam'])
+const VALID_SECTIONS = new Set<SectionKey>(['dashboard', 'costs', 'iam'])
 
 interface HomeSectionContentProps {
   section: string | undefined
 }
 
-function DashboardView() {
+function SimpleSection({ message }: { message: string }) {
   return (
     <div className={homeSectionStyles.shell}>
-      <div className={homeSectionStyles.grid}>Welcome to Dashboard</div>
+      <div className={homeSectionStyles.grid}>{message}</div>
     </div>
   )
-}
-
-function CostsView() {
-  return (
-    <div className={homeSectionStyles.shell}>
-      <div className={homeSectionStyles.grid}>Costs Overview</div>
-    </div>
-  )
-}
-
-function IamView() {
-  return (
-    <div className={homeSectionStyles.shell}>
-      <div className={homeSectionStyles.grid}>IAM Users</div>
-    </div>
-  )
-}
-
-const sectionViews: Record<string, () => ReactElement> = {
-  dashboard: DashboardView,
-  costs: CostsView,
-  iam: IamView,
 }
 
 export default function HomeSectionContent({ section }: HomeSectionContentProps) {
   const router = useRouter()
+  const { dictionary } = useTranslation()
 
   useEffect(() => {
     if (!section) {
       router.replace('/home/dashboard')
       return
     }
-    if (!VALID_SECTIONS.has(section)) {
+    if (!VALID_SECTIONS.has(section as SectionKey)) {
       router.replace('/home/dashboard')
     }
   }, [section, router])
 
-  if (!section || !VALID_SECTIONS.has(section)) {
+  if (!section || !VALID_SECTIONS.has(section as SectionKey)) {
     return null
   }
 
-  const View = sectionViews[section]
-  return <View />
+  const sectionKey = section as SectionKey
+
+  if (sectionKey === 'dashboard') {
+    return <DashboardSection />
+  }
+
+  return <SimpleSection message={dictionary.homeContent[sectionKey]} />
 }

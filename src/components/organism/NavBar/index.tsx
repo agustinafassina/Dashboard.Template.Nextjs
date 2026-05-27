@@ -11,7 +11,8 @@ import Link from 'next/link'
 import UserMenu from '@/components/molecules/UserMenu'
 import { NavBarUserSkeleton } from '@/components/atoms/Skeleton'
 import { CustomJwtPayload } from '@/interfaces/payload-jwt'
-import { getCurrentSectionName } from '@/utils/getCurrentSectionName'
+import { useTranslation } from '@/i18n/useTranslation'
+import { getCurrentSectionKey } from '@/utils/getCurrentSectionKey'
 import {
   getLogoSkeletonClass,
   getNavBarClass,
@@ -24,7 +25,8 @@ export default function NavBar() {
   const { user, isLoading } = useUser()
   const router = useRouter()
   const pathname = usePathname()
-  const sectionName = getCurrentSectionName(pathname)
+  const sectionKey = getCurrentSectionKey(pathname)
+  const { dictionary, sectionTitle } = useTranslation()
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const token = getCookie('token')
@@ -32,6 +34,7 @@ export default function NavBar() {
     useState<CustomJwtPayload | null>(null)
 
   const isDark = mounted && resolvedTheme === 'dark'
+  const sectionName = sectionKey ? sectionTitle(sectionKey) : null
 
   useEffect(() => {
     setMounted(true)
@@ -69,12 +72,16 @@ export default function NavBar() {
   }
 
   return (
-    <nav className={navClassName} role="navigation" aria-label="Main navigation">
+    <nav
+      className={navClassName}
+      role="navigation"
+      aria-label={dictionary.nav.mainAriaLabel}
+    >
       <div className={navBarStyles.leftCluster}>
         <Link
           href="/home/dashboard"
           className={navBarStyles.logoLink}
-          aria-label="Go to dashboard"
+          aria-label={dictionary.nav.goToDashboard}
         >
           <Image
             src="/images/security-logo.png"

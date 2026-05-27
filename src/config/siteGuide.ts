@@ -1,7 +1,6 @@
 export interface GuideSection {
   id: string
   title: string
-  /** Texto de la sección — ir completando según avance el sitio */
   content: string
 }
 
@@ -11,7 +10,6 @@ export const siteGuideIntro = {
     'Guía del dashboard. El contenido se completa por sección a medida que el sitio crece.',
 }
 
-/** Secciones de la guía (editar content por cada área del dashboard) */
 export const siteGuideSections: GuideSection[] = [
   {
     id: 'general',

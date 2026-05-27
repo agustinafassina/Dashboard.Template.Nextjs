@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -10,7 +10,8 @@ import LogoutIcon from '@/components/atoms/Icons/Logout'
 import SunIcon from '@/components/atoms/Icons/SunIcon'
 import MoonIcon from '@/components/atoms/Icons/MoonIcon'
 import { getClientName } from '@/utils/sharedFunctions'
-import { useLanguage, type Locale } from '@/context/LanguageContext'
+import { useTranslation } from '@/i18n/useTranslation'
+import type { Locale } from '@/context/LanguageContext'
 import {
   getAvatarButtonClass,
   getAvatarImageClass,
@@ -25,25 +26,15 @@ import {
 
 type ThemeOption = 'light' | 'dark'
 
-const languageOptions: { value: Locale; label: string }[] = [
-  { value: 'es', label: 'Español' },
-  { value: 'en', label: 'English' },
-]
-
 interface UserMenuProps {
   user: UserProfile
   jobTitle?: string | null
 }
 
-const themeOptions: { value: ThemeOption; label: string; icon: ReactNode }[] = [
-  { value: 'light', label: 'Light', icon: <SunIcon width={18} height={18} /> },
-  { value: 'dark', label: 'Dark', icon: <MoonIcon width={18} height={18} /> },
-]
-
 export default function UserMenu({ user, jobTitle }: UserMenuProps) {
   const router = useRouter()
   const { theme, setTheme, resolvedTheme } = useTheme()
-  const { locale, setLocale } = useLanguage()
+  const { locale, setLocale, dictionary, format } = useTranslation()
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [imageError, setImageError] = useState(false)
@@ -58,8 +49,37 @@ export default function UserMenu({ user, jobTitle }: UserMenuProps) {
     .slice(0, 2)
 
   const activeTheme: ThemeOption = theme === 'dark' ? 'dark' : 'light'
-
   const isDark = mounted && resolvedTheme === 'dark'
+
+  const languageOptions: { value: Locale; label: string }[] = useMemo(
+    () => [
+      { value: 'es', label: dictionary.language.es },
+      { value: 'en', label: dictionary.language.en },
+    ],
+    [dictionary.language.es, dictionary.language.en],
+  )
+
+  const themeOptions: { value: ThemeOption; label: string; icon: ReactNode }[] =
+    useMemo(
+      () => [
+        {
+          value: 'light',
+          label: dictionary.userMenu.themeLight,
+          icon: <SunIcon width={18} height={18} />,
+        },
+        {
+          value: 'dark',
+          label: dictionary.userMenu.themeDark,
+          icon: <MoonIcon width={18} height={18} />,
+        },
+      ],
+      [dictionary.userMenu.themeDark, dictionary.userMenu.themeLight],
+    )
+
+  const activeThemeLabel =
+    resolvedTheme === 'dark'
+      ? dictionary.userMenu.themeDark
+      : dictionary.userMenu.themeLight
 
   useEffect(() => {
     setMounted(true)
@@ -108,7 +128,7 @@ export default function UserMenu({ user, jobTitle }: UserMenuProps) {
         className={getAvatarButtonClass(isDark, open)}
         aria-expanded={open}
         aria-haspopup="menu"
-        aria-label={`Menú de ${displayName}`}
+        aria-label={format(dictionary.userMenu.menuOf, { name: displayName })}
       >
         {user.picture && !imageError ? (
           <Image
@@ -133,12 +153,12 @@ export default function UserMenu({ user, jobTitle }: UserMenuProps) {
           </div>
 
           <div className={userMenuStyles.section}>
-            <p className={menuSectionLabel}>Apariencia</p>
+            <p className={menuSectionLabel}>{dictionary.userMenu.appearance}</p>
             {mounted ? (
               <div
                 className={userMenuStyles.themeGrid}
                 role="group"
-                aria-label="Tema del dashboard"
+                aria-label={dictionary.userMenu.themeAriaLabel}
               >
                 {themeOptions.map((option) => {
                   const isActive = activeTheme === option.value
@@ -166,18 +186,20 @@ export default function UserMenu({ user, jobTitle }: UserMenuProps) {
             )}
             {mounted && resolvedTheme && (
               <p className={userMenuStyles.themeHint}>
-                Activo: {resolvedTheme === 'dark' ? 'Dark' : 'Light'}
+                {format(dictionary.userMenu.themeActive, {
+                  theme: activeThemeLabel,
+                })}
               </p>
             )}
           </div>
 
           <div className={userMenuStyles.languageSection}>
-            <p className={menuSectionLabel}>Idioma</p>
+            <p className={menuSectionLabel}>{dictionary.userMenu.language}</p>
             {mounted ? (
               <div
                 className={userMenuStyles.languageGrid}
                 role="group"
-                aria-label="Idioma del dashboard"
+                aria-label={dictionary.userMenu.languageAriaLabel}
               >
                 {languageOptions.map((option) => {
                   const isActive = locale === option.value
@@ -216,7 +238,7 @@ export default function UserMenu({ user, jobTitle }: UserMenuProps) {
               <span className={userMenuStyles.guideIcon}>
                 <BookIcon />
               </span>
-              Guía — About this site
+              {dictionary.userMenu.guide}
             </a>
             <button
               type="button"
@@ -225,7 +247,7 @@ export default function UserMenu({ user, jobTitle }: UserMenuProps) {
               className={userMenuStyles.logoutButton}
             >
               <LogoutIcon width={18} height={18} />
-              Cerrar sesión
+              {dictionary.userMenu.logout}
             </button>
           </div>
         </div>

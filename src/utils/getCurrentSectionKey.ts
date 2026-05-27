@@ -1,9 +1,10 @@
 import { sidebarConfig } from '@/config/sidebar'
+import type { SectionKey } from '@/i18n/types'
 
-export function getCurrentSectionName(pathname: string | null): string | null {
+export function getCurrentSectionKey(pathname: string | null): SectionKey | null {
   if (!pathname) return null
 
-  let bestMatch: { name: string; path: string } | null = null
+  let bestMatch: { sectionKey: SectionKey; path: string } | null = null
 
   for (const items of Object.values(sidebarConfig)) {
     for (const item of items) {
@@ -16,5 +17,5 @@ export function getCurrentSectionName(pathname: string | null): string | null {
     }
   }
 
-  return bestMatch?.name ?? null
+  return bestMatch?.sectionKey ?? null
 }
