@@ -9,10 +9,16 @@ import {
   type ReactNode,
 } from 'react'
 
-export type Locale = 'es' | 'en'
+import { getCookie, setCookie } from 'cookies-next'
+import { appConfig } from '@/config/app'
+import {
+  DEFAULT_LOCALE,
+  LOCALE_COOKIE_KEY,
+  LOCALE_STORAGE_KEY,
+  parseLocale,
+} from '@/constants/locale'
 
-const STORAGE_KEY = 'dashboard-locale'
-const DEFAULT_LOCALE: Locale = 'es'
+export type Locale = 'es' | 'en'
 
 interface LanguageContextValue {
   locale: Locale
@@ -27,10 +33,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored === 'es' || stored === 'en') {
-        setLocaleState(stored)
-      }
+      const fromStorage = localStorage.getItem(LOCALE_STORAGE_KEY)
+      const cookieValue = getCookie(LOCALE_COOKIE_KEY)
+      const fromCookie =
+        typeof cookieValue === 'string' ? cookieValue : undefined
+      const stored = fromStorage ?? fromCookie
+      setLocaleState(parseLocale(stored))
     } catch {
       // ignore storage errors
     }
@@ -45,7 +53,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next)
     try {
-      localStorage.setItem(STORAGE_KEY, next)
+      localStorage.setItem(LOCALE_STORAGE_KEY, next)
+      setCookie(LOCALE_COOKIE_KEY, next, {
+        path: '/',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * appConfig.localeCookieMaxAgeDays,
+      })
     } catch {
       // ignore storage errors
     }

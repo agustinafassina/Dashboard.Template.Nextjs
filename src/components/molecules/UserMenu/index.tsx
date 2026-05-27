@@ -1,6 +1,14 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -39,6 +47,16 @@ export default function UserMenu({ user, jobTitle }: UserMenuProps) {
   const [mounted, setMounted] = useState(false)
   const [imageError, setImageError] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
+  const menuPanelId = 'user-menu-panel'
+
+  const closeMenu = useCallback(() => setOpen(false), [])
+
+  useFocusTrap(panelRef, open, {
+    onEscape: closeMenu,
+    initialFocus: 'first',
+  })
 
   const displayName = getClientName(user)
   const initials = displayName
@@ -104,7 +122,7 @@ export default function UserMenu({ user, jobTitle }: UserMenuProps) {
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
+      if (event.key === 'Escape') closeMenu()
     }
 
     document.addEventListener('mousedown', handlePointerDown)
@@ -113,21 +131,31 @@ export default function UserMenu({ user, jobTitle }: UserMenuProps) {
       document.removeEventListener('mousedown', handlePointerDown)
       document.removeEventListener('keydown', handleKeyDown)
     }
+  }, [open, closeMenu])
+
+  const wasOpenRef = useRef(false)
+  useEffect(() => {
+    if (wasOpenRef.current && !open) {
+      triggerRef.current?.focus()
+    }
+    wasOpenRef.current = open
   }, [open])
 
   const handleLogout = () => {
-    setOpen(false)
+    closeMenu()
     router.push('/api/auth/logout')
   }
 
   return (
     <div ref={containerRef} className={userMenuStyles.root}>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((prev) => !prev)}
         className={getAvatarButtonClass(isDark, open)}
         aria-expanded={open}
         aria-haspopup="menu"
+        aria-controls={menuPanelId}
         aria-label={format(dictionary.userMenu.menuOf, { name: displayName })}
       >
         {user.picture && !imageError ? (
@@ -145,7 +173,13 @@ export default function UserMenu({ user, jobTitle }: UserMenuProps) {
       </button>
 
       {open && (
-        <div role="menu" className={userMenuStyles.panel}>
+        <div
+          ref={panelRef}
+          id={menuPanelId}
+          role="menu"
+          tabIndex={-1}
+          className={userMenuStyles.panel}
+        >
           <div className={userMenuStyles.userHeader}>
             <p className={userMenuStyles.userName}>{displayName}</p>
             {jobTitle && <p className={userMenuStyles.userJob}>{jobTitle}</p>}
@@ -232,7 +266,7 @@ export default function UserMenu({ user, jobTitle }: UserMenuProps) {
               target="_blank"
               rel="noopener noreferrer"
               role="menuitem"
-              onClick={() => setOpen(false)}
+              onClick={closeMenu}
               className={userMenuStyles.guideLink}
             >
               <span className={userMenuStyles.guideIcon}>

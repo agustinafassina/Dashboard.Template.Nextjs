@@ -1,4 +1,5 @@
 import type { Locale } from '@/context/LanguageContext'
+import type { GuideSectionId } from '@/config/siteGuide'
 
 export type SectionKey = 'dashboard' | 'costs' | 'iam'
 
@@ -36,6 +37,29 @@ export type TranslationDictionary = {
   language: {
     es: string
     en: string
+  }
+  guide: {
+    metaTitle: string
+    eyebrow: string
+    title: string
+    description: string
+    backToDashboard: string
+    tocLabel: string
+    tocAriaLabel: string
+    sections: Record<GuideSectionId, { title: string; content: string }>
+  }
+  errors: {
+    notFound: {
+      title: string
+      description: string
+      backHome: string
+    }
+    generic: {
+      title: string
+      description: string
+      retry: string
+      backHome: string
+    }
   }
 }
 

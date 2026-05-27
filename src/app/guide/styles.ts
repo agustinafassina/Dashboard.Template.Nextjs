@@ -1,6 +1,7 @@
 export const guidePageStyles = {
   page: 'min-h-[calc(100vh-4.75rem)] bg-brand_50 transition-colors dark:bg-gray_800',
-  article: 'mx-auto max-w-3xl px-6 py-10 text-gray_900 dark:text-gray_100',
+  article:
+    'mx-auto w-full min-w-0 max-w-3xl px-4 py-8 sm:px-6 sm:py-10 text-gray_900 dark:text-gray_100',
   header: 'mb-10 border-b border-gray_200 pb-8 dark:border-gray_700',
   eyebrow:
     'mb-2 text-sm font-medium uppercase tracking-wide text-brand_500 dark:text-brand_300',
