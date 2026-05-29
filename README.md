@@ -187,6 +187,27 @@ No new `page.tsx` under `home/` is required — routing is handled by `[[...sect
 - Set all `AUTH0_*` variables in your hosting provider.
 - Update Auth0 callback/logout URLs for production domains.
 
+#### 🐳 Docker
+Build the image:
+
+```bash
+docker build -t dashboard-template .
+```
+
+Run with Auth0 env vars (use your production URL in `AUTH0_BASE_URL`):
+
+```bash
+docker run --rm -p 3000:3000 \
+  -e AUTH0_SECRET=your_secret \
+  -e AUTH0_BASE_URL=https://your-domain.com \
+  -e AUTH0_ISSUER_BASE_URL=https://your-tenant.auth0.com \
+  -e AUTH0_CLIENT_ID=your_client_id \
+  -e AUTH0_CLIENT_SECRET=your_client_secret \
+  dashboard-template
+```
+
+Open [http://localhost:3000](http://localhost:3000). Update Auth0 callback/logout URLs to match `AUTH0_BASE_URL`.
+
 ### 🐛 Troubleshooting
 **`issuerBaseURL must be a valid uri`**
 
@@ -371,9 +392,31 @@ No hace falta crear `page.tsx` en `home/` — la ruta catch-all `[[...section]]`
 - Servidor (metadata, 404): `getServerLocale()` lee la cookie `dashboard-locale`
 
 ### ☁️ Despliegue
+
 - `output: 'standalone'` en `next.config.mjs` para Docker.
 - Configurá todas las variables `AUTH0_*` en el hosting.
 - Actualizá callbacks y logout URLs en Auth0 para producción.
+
+#### 🐳 Docker
+Construir la imagen:
+
+```bash
+docker build -t dashboard-template .
+```
+
+Ejecutar con variables Auth0 (usá tu URL de producción en `AUTH0_BASE_URL`):
+
+```bash
+docker run --rm -p 3000:3000 \
+  -e AUTH0_SECRET=tu_secreto \
+  -e AUTH0_BASE_URL=https://tu-dominio.com \
+  -e AUTH0_ISSUER_BASE_URL=https://tu-tenant.auth0.com \
+  -e AUTH0_CLIENT_ID=tu_client_id \
+  -e AUTH0_CLIENT_SECRET=tu_client_secret \
+  dashboard-template
+```
+
+Abrí [http://localhost:3000](http://localhost:3000). Actualizá callback/logout en Auth0 según `AUTH0_BASE_URL`.
 
 ### 🐛 Solución de problemas
 **Error `issuerBaseURL must be a valid uri`**
