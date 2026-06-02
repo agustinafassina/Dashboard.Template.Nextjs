@@ -116,8 +116,11 @@ src/
 │   └── organism/             # NavBar, Sidebar, DashboardCharts, …
 ├── config/
 │   ├── app.ts                # App name, description, default locale
+│   ├── theme.ts              # THEME_PRESET — color palette entry point
+│   ├── theme.presets.ts      # lilac, neutral, blue, emerald
 │   ├── sidebar.ts            # Sidebar items (sectionKey + path)
 │   └── siteGuide.ts          # Guide section IDs
+docs/THEME.md                   # How to change colors (1 or 3 steps)
 ├── context/                  # Language, Sidebar
 ├── i18n/
 │   ├── dictionaries/         # es.ts, en.ts
@@ -174,8 +177,20 @@ No new `page.tsx` under `home/` is required — routing is handled by `[[...sect
 #### 🌙 Themes
 - Toggle: avatar menu → **Appearance** → Light / Dark
 - Default: light (`src/provider/index.tsx`)
-- Palette: `brand_*` and `gray_*` in `tailwind.config.js`
-- Co-located styles: prefer `styles.ts` + `dark:` variants
+
+**Change the color palette (few steps):**
+
+| Step | Action |
+|------|--------|
+| **1** | Open `src/config/theme.ts` |
+| **2a** | Set `THEME_PRESET` to `'lilac'` \| `'neutral'` \| `'blue'` \| `'emerald'` |
+| **2b** | Or set `THEME_PRESET = 'custom'` and edit `themeCustom` (accent + light/dark surfaces) |
+| **3** | Restart `npm run dev` |
+
+Full guide: **[docs/THEME.md](./docs/THEME.md)**. Presets live in `src/config/theme.presets.ts`. Charts update automatically from the accent.
+
+- UI tokens: `brand_*` (accent), `bg-shell-dark` / `bg-shell-dark-elevated` (dark layout)
+- Neutral `gray_*` stays for text and borders; co-located `styles.ts` + `dark:` variants
 
 #### 🌐 Internationalization
 - Dictionaries: `src/i18n/dictionaries/{es,en}.ts`
@@ -223,6 +238,13 @@ Open [http://localhost:3000](http://localhost:3000). Update Auth0 callback/logou
 
 - Change language in the avatar menu once so the cookie is set
 - Or clear cookies and reload
+
+**Webpack cache warning (`PackFileCacheStrategy` / `ENOENT` on `.pack.gz`)**
+
+- Usually harmless: compilation still succeeds (`✓ Compiled`).
+- Common on **Windows** when the repo is under **OneDrive** (sync locks `.next/cache` during rename).
+- Fixes: run `npm run dev:clean`; exclude the project’s `.next` folder from OneDrive sync; close duplicate `npm run dev` terminals.
+- Dev on Windows uses in-memory webpack cache by default (see `next.config.mjs`). Set `NEXT_DEV_FS_CACHE=1` before `npm run dev` to restore disk cache if you prefer.
 
 ### 📝 License
 Agustina Fassina
@@ -340,8 +362,11 @@ src/
 │   └── organism/             # NavBar, Sidebar, DashboardCharts, …
 ├── config/
 │   ├── app.ts                # Nombre, descripción, locale por defecto
+│   ├── theme.ts              # THEME_PRESET — punto de entrada de colores
+│   ├── theme.presets.ts      # lilac, neutral, blue, emerald
 │   ├── sidebar.ts            # Ítems del sidebar
 │   └── siteGuide.ts          # IDs de secciones de la guía
+docs/THEME.md                   # Cómo cambiar colores (1 o 3 pasos)
 ├── context/                  # Language, Sidebar
 ├── i18n/dictionaries/        # es.ts, en.ts
 ├── hooks/
@@ -384,7 +409,20 @@ No hace falta crear `page.tsx` en `home/` — la ruta catch-all `[[...section]]`
 #### 🌙 Temas
 - Cambio: menú del avatar → **Apariencia** → Claro / Oscuro
 - Por defecto: claro
-- Colores: `brand_*` y `gray_*` en `tailwind.config.js`
+
+**Cambiar la gama de colores (pocos pasos):**
+
+| Paso | Acción |
+|------|--------|
+| **1** | Abrí `src/config/theme.ts` |
+| **2a** | Cambiá `THEME_PRESET` a `'lilac'` \| `'neutral'` \| `'blue'` \| `'emerald'` |
+| **2b** | O `THEME_PRESET = 'custom'` y editá `themeCustom` (acento + superficies claro/oscuro) |
+| **3** | Reiniciá `npm run dev` |
+
+Guía completa: **[docs/THEME.md](./docs/THEME.md)**. Presets en `src/config/theme.presets.ts`. Los gráficos se actualizan solos.
+
+- Tokens: `brand_*` (acento), `bg-shell-dark` / `bg-shell-dark-elevated` (layout oscuro)
+- Los `gray_*` siguen para texto y bordes
 
 #### 🌐 Internacionalización
 - Diccionarios: `src/i18n/dictionaries/{es,en}.ts`
@@ -392,7 +430,6 @@ No hace falta crear `page.tsx` en `home/` — la ruta catch-all `[[...section]]`
 - Servidor (metadata, 404): `getServerLocale()` lee la cookie `dashboard-locale`
 
 ### ☁️ Despliegue
-
 - `output: 'standalone'` en `next.config.mjs` para Docker.
 - Configurá todas las variables `AUTH0_*` en el hosting.
 - Actualizá callbacks y logout URLs en Auth0 para producción.
@@ -433,6 +470,13 @@ Abrí [http://localhost:3000](http://localhost:3000). Actualizá callback/logout
 
 - Cambiá el idioma una vez desde el menú del avatar (setea la cookie)
 - O borrá cookies y recargá
+
+**Aviso de caché webpack (`PackFileCacheStrategy` / `ENOENT` en `.pack.gz`)**
+
+- Suele ser inofensivo: la compilación igual termina bien (`✓ Compiled`).
+- Frecuente en **Windows** con el repo en **OneDrive** (sincroniza `.next/cache` mientras webpack renombra archivos).
+- Solución: `npm run dev:clean`; excluir la carpeta `.next` de OneDrive; no tener dos `npm run dev` abiertos.
+- En dev, Windows usa caché en memoria por defecto (`next.config.mjs`). `NEXT_DEV_FS_CACHE=1` antes de `npm run dev` si querés caché en disco.
 
 ### 📝 Licencia
 Agustina Fassina

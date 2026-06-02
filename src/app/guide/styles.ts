@@ -1,5 +1,5 @@
 export const guidePageStyles = {
-  page: 'min-h-[calc(100vh-4.75rem)] bg-brand_50 transition-colors dark:bg-gray_800',
+  page: 'min-h-[calc(100vh-4.75rem)] bg-brand_50 transition-colors dark:bg-shell-dark',
   article:
     'mx-auto w-full min-w-0 max-w-3xl px-4 py-8 sm:px-6 sm:py-10 text-gray_900 dark:text-gray_100',
   header: 'mb-10 border-b border-gray_200 pb-8 dark:border-gray_700',
@@ -10,7 +10,7 @@ export const guidePageStyles = {
   backLink:
     'mt-4 inline-block text-sm font-medium text-brand_500 hover:underline dark:text-brand_300',
   toc:
-    'mb-10 rounded-xl border border-gray_200 bg-white p-4 dark:border-gray_700 dark:bg-gray_900',
+    'mb-10 rounded-xl border border-gray_200 bg-white p-4 dark:border-gray_700 dark:bg-shell-dark-elevated',
   tocLabel:
     'mb-3 text-xs font-semibold uppercase tracking-wide text-gray_500 dark:text-gray_400',
   tocList: 'flex flex-col gap-2',
@@ -18,7 +18,7 @@ export const guidePageStyles = {
     'text-sm font-medium text-brand_500 hover:underline dark:text-brand_300',
   sections: 'flex flex-col gap-10',
   section:
-    'scroll-mt-24 rounded-xl border border-gray_200 bg-white p-6 dark:border-gray_700 dark:bg-gray_900',
+    'scroll-mt-24 rounded-xl border border-gray_200 bg-white p-6 dark:border-gray_700 dark:bg-shell-dark-elevated',
   sectionTitle: 'mb-4 text-xl font-semibold',
   sectionBody: 'space-y-3 text-sm leading-relaxed text-gray_700 dark:text-gray_300',
 } as const

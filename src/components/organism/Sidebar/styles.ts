@@ -10,7 +10,7 @@ export const sidebarStyles = {
 
 export function getAsideClass(collapsed: boolean) {
   return cn(
-    'flex flex-shrink-0 flex-col justify-between border-r border-r-black/10 bg-white shadow-sm transition-[width] duration-300 ease-in-out dark:border-r-gray_700 dark:bg-gray_900',
+    'flex flex-shrink-0 flex-col justify-between border-r border-r-black/10 bg-white shadow-sm transition-[width] duration-300 ease-in-out dark:border-r-gray_700 dark:bg-shell-dark-elevated',
     collapsed ? 'w-[4.5rem] min-w-[4.5rem]' : 'w-[15.625rem] min-w-[15.625rem]',
   )
 }
@@ -28,7 +28,7 @@ export function getHeaderRowClass(collapsed: boolean) {
 
 export function getToggleButtonClass() {
   return cn(
-    'flex h-9 w-9 items-center justify-center rounded-lg text-gray_600 transition-colors hover:bg-brand_50 dark:text-gray_400 dark:hover:bg-gray_800',
+    'flex h-9 w-9 items-center justify-center rounded-lg text-gray_600 transition-colors hover:bg-brand_50 dark:text-gray_400 dark:hover:bg-shell-dark',
   )
 }
 

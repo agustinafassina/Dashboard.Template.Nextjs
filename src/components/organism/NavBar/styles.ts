@@ -12,7 +12,7 @@ export function getNavBarClass(isDark: boolean) {
   return cn(
     'flex h-[4.75rem] w-full sticky top-0 z-50 items-center justify-between border-b p-3 transition-colors',
     isDark
-      ? 'border-gray_700 bg-gray_900 text-white'
+      ? 'border-gray_700 bg-shell-dark-elevated text-white'
       : 'border-gray_200 bg-white text-gray_900',
   )
 }

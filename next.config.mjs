@@ -1,8 +1,15 @@
 const nextConfig = () => {
-  /**
-   * @type {import('next').NextConfig}
-   */
-  return {
+  const useWebpackFsCacheOnWindows =
+    process.env.NEXT_DEV_FS_CACHE === '1'
+
+    return {
+    webpack: (config, { dev }) => {
+
+      if (dev && process.platform === 'win32' && !useWebpackFsCacheOnWindows) {
+        config.cache = { type: 'memory' }
+      }
+      return config
+    },
     images: {
       remotePatterns: [
         {

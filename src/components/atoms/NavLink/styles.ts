@@ -7,10 +7,10 @@ export function getNavLinkClass(
 ) {
   return cn(
     'relative flex items-center rounded-lg text-sm font-medium transition-all duration-150',
-    'hover:bg-brand_50/60 dark:hover:bg-gray_800/60 dark:text-gray_300',
+    'hover:bg-brand_50/60 dark:hover:bg-shell-dark/60 dark:text-gray_300',
     collapsed ? 'justify-center px-2 py-2.5' : 'gap-3 px-3 py-2.5',
     isActive &&
-      'bg-brand_100 text-brand_700 shadow-sm dark:bg-gray_800 dark:text-brand_300',
+      'bg-brand_100 text-brand_700 shadow-sm dark:bg-shell-dark dark:text-brand_300',
     !isActive && 'text-gray_700 dark:text-gray_400',
     isNavigating && 'opacity-75',
   )

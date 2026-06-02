@@ -4,7 +4,7 @@ import { menuGridOptionClass, menuSectionLabel, skeletonPulse } from '@/styles/s
 export const userMenuStyles = {
   root: 'relative',
   panel:
-    'absolute right-0 top-[calc(100%+0.5rem)] z-[60] w-72 overflow-hidden rounded-xl border border-gray_200 bg-white text-gray_900 shadow-lg dark:border-gray_700 dark:bg-gray_900 dark:text-gray_100',
+    'absolute right-0 top-[calc(100%+0.5rem)] z-[60] w-72 overflow-hidden rounded-xl border border-gray_200 bg-white text-gray_900 shadow-lg dark:border-gray_700 dark:bg-shell-dark-elevated dark:text-gray_100',
   userHeader: 'border-b border-gray_200 px-4 py-3 dark:border-gray_700',
   userName: 'truncate text-sm font-semibold text-gray_900 dark:text-white',
   userJob: 'mt-0.5 truncate text-xs text-gray_600 dark:text-gray_400',

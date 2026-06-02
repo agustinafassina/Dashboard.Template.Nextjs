@@ -12,7 +12,7 @@ export function menuGridOptionClass(isActive: boolean, size: 'sm' | 'md' = 'sm')
       : 'rounded-lg px-3 py-2.5 text-sm',
     isActive
       ? 'bg-brand_100 text-brand_700 dark:bg-brand_900/40 dark:text-brand_300'
-      : 'text-gray_600 hover:bg-gray_100 dark:text-gray-400 dark:hover:bg-gray-800',
+      : 'text-gray_600 hover:bg-gray_100 dark:text-gray_400 dark:hover:bg-shell-dark',
   )
 }
 
