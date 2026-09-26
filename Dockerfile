@@ -13,6 +13,14 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Placeholders for `next build` only - pass real Auth0 values at runtime
+RUN AUTH0_SECRET=build-placeholder-secret-min-32-chars-long \
+    AUTH0_BASE_URL=http://localhost:3000 \
+    AUTH0_ISSUER_BASE_URL=https://example.auth0.com \
+    AUTH0_CLIENT_ID=build-placeholder-client-id \
+    AUTH0_CLIENT_SECRET=build-placeholder-client-secret \
+    npm run build
+
 FROM base AS runner
 WORKDIR /app
 
