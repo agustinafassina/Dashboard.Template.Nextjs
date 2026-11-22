@@ -1,57 +1,17 @@
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-import { getSession } from '@auth0/nextjs-auth0/edge'
-import { shouldRefreshToken } from '@/utils/jwt'
+import { withMiddlewareAuthRequired } from '@auth0/nextjs-auth0/edge'
 
-function isClientNavigationRequest(req: NextRequest) {
-  return (
-    req.headers.get('RSC') === '1' ||
-    req.headers.get('Next-Router-Prefetch') === '1'
-  )
-}
+// Cookies written by older versions of this template, which exposed the
+// access token to client-side JavaScript. Remove them if still present.
+const LEGACY_COOKIES = ['token', 'username']
 
-export default async function middleware(req: NextRequest) {
-  const path = req.nextUrl.pathname
-
-  if (
-    path.startsWith('/api/auth') ||
-    path.startsWith('/_next') ||
-    path.includes('icon.png')
-  ) {
-    return NextResponse.next()
-  }
-
-  const existingToken = req.cookies.get('token')?.value
-
-  if (isClientNavigationRequest(req) && existingToken) {
-    return NextResponse.next()
-  }
-
-  if (!shouldRefreshToken(existingToken)) {
-    return NextResponse.next()
-  }
-
+export default withMiddlewareAuthRequired(async (req) => {
   const res = NextResponse.next()
-  const session = await getSession(req, res)
-
-  if (session?.accessToken) {
-    res.cookies.set('token', session.accessToken, {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-    })
-
-    res.cookies.set({
-      name: 'username',
-      value: session.user.nickname.toLowerCase(),
-      httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-    })
+  for (const name of LEGACY_COOKIES) {
+    if (req.cookies.has(name)) res.cookies.delete(name)
   }
-
   return res
-}
+})
 
 export const config = {
   matcher: ['/', '/home', '/home/:path*', '/guide'],

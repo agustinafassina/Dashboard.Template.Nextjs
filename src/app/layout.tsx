@@ -5,7 +5,6 @@ import { UserProvider } from '@auth0/nextjs-auth0/client'
 import NavBar from '@/components/organism/NavBar'
 import Providers from '@/provider'
 import '@/styles/globals.css'
-import { AxiosInterceptor } from '@/api/axiosBase'
 import { appConfig } from '@/config/app'
 import { cn } from '@/styles/cn'
 import { getServerLocale } from '@/utils/locale'
@@ -39,16 +38,14 @@ export default async function RootLayout({
       className={cn(rootLayoutStyles.html, montserrat.className)}
       suppressHydrationWarning
     >
-      <AxiosInterceptor>
-        <UserProvider>
-          <body className={rootLayoutStyles.body} suppressHydrationWarning>
-            <Providers>
-              <NavBar />
-              {children}
-            </Providers>
-          </body>
-        </UserProvider>
-      </AxiosInterceptor>
+      <UserProvider>
+        <body className={rootLayoutStyles.body} suppressHydrationWarning>
+          <Providers>
+            <NavBar />
+            {children}
+          </Providers>
+        </body>
+      </UserProvider>
     </html>
   )
 }

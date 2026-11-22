@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
-import { getCookie } from 'cookies-next'
-import { jwtDecode } from 'jwt-decode'
+import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
 import UserMenu from '@/components/molecules/UserMenu'
 import { NavBarUserSkeleton } from '@/components/atoms/Skeleton'
-import { CustomJwtPayload } from '@/interfaces/payload-jwt'
+import { axiosBaseJson } from '@/api/axiosBase'
+import { UserClaims } from '@/interfaces/user-claims'
 import { useTranslation } from '@/i18n/useTranslation'
 import { getCurrentSectionKey } from '@/utils/getCurrentSectionKey'
 import {
@@ -29,9 +29,13 @@ export default function NavBar() {
   const { dictionary, sectionTitle } = useTranslation()
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
-  const token = getCookie('token')
-  const [accessTokenDecoded, setAccessTokenDecoded] =
-    useState<CustomJwtPayload | null>(null)
+  const { data: claims } = useQuery({
+    queryKey: ['me', 'claims'],
+    queryFn: async () =>
+      (await axiosBaseJson.get<UserClaims>('/api/me/claims')).data,
+    enabled: !!user,
+    staleTime: 5 * 60 * 1000,
+  })
 
   const isDark = mounted && resolvedTheme === 'dark'
   const sectionName = sectionKey ? sectionTitle(sectionKey) : null
@@ -45,17 +49,6 @@ export default function NavBar() {
       router.push('/api/auth/login')
     }
   }, [user, isLoading, router])
-
-  useEffect(() => {
-    if (token && typeof token === 'string') {
-      try {
-        const decoded = jwtDecode(token) as CustomJwtPayload
-        setAccessTokenDecoded(decoded)
-      } catch (error) {
-        console.error('Error decoding token:', error)
-      }
-    }
-  }, [token])
 
   const navClassName = getNavBarClass(isDark)
 
@@ -100,7 +93,7 @@ export default function NavBar() {
       {user && Object.keys(user).length > 0 ? (
         <UserMenu
           user={user}
-          jobTitle={accessTokenDecoded?.user_jobtitle_ad}
+          jobTitle={claims?.jobTitle}
         />
       ) : (
         <NavBarUserSkeleton />
