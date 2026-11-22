@@ -20,7 +20,8 @@ src/
 │   ├── theme.ts              # Color preset switch
 │   └── theme.presets.ts      # lilac | neutral | blue | emerald
 ├── i18n/dictionaries/        # es.ts, en.ts
-├── middleware.ts             # Auth + token cookie
+├── app/api/proxy/            # Server-side API proxy (adds Auth0 token)
+├── middleware.ts             # Route protection (Auth0)
 └── provider/                 # Theme, language, React Query
 docs/THEME.md                   # How to change colors
 Dockerfile
